@@ -28,6 +28,7 @@ Generic Recommendation to Solve the Security Issue
 --------------------------------------------------
 The file types allowed to be uploaded should be restricted to only those that are necessary for business functionality.
 * The application should perform filtering and content checking on any files which are uploaded to the server. Files should be thoroughly scanned and validated before being made available to other users. If in doubt, the file should be discarded.
+
 Adding “Content-Disposition: Attachment” header to static files will secure the website against Flash/PDF-based cross-site content hijacking attacks. It is recommended to perform this practice for all of the files that users need to download in all the modules that deal with a file download. Although this method does not secure the website against attacks by using Silverlight or similar objects, it can mitigate the risk of using Adobe Flash and PDF objects especially when uploading PDF files is permitted.
 
 
