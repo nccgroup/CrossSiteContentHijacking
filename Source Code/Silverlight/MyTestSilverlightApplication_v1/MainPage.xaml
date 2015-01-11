@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="ContentHijacking.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="400" d:DesignWidth="707" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk">
+
+    <Grid x:Name="LayoutRoot" Background="#FFCFF2CD" Width="700" Height="400">
+        <Button Content="GET Contents!" Height="25" HorizontalAlignment="Left" Margin="12,77,0,0" Name="buttonGETContents" VerticalAlignment="Top" Width="168" Click="button1_Click" />
+        <TextBox Height="200" HorizontalAlignment="Left" Margin="12,124,0,0" Name="textBoxResult" VerticalAlignment="Top" Width="684" Text="Hello World from XAP!" TextWrapping="Wrap" Background="#FF005A7C" Foreground="White" />
+        <TextBox Height="25" HorizontalAlignment="Left" Margin="111,37,0,0" Name="textBoxTarget" VerticalAlignment="Top" Width="570" />
+        <sdk:Label Height="17" HorizontalAlignment="Left" Margin="12,41,0,0" Name="labelTarget" VerticalAlignment="Top" Width="93" Content="Target URL:" />
+        <sdk:Label Height="23" HorizontalAlignment="Center" Margin="243,0,233,0" Name="labelType" VerticalAlignment="Top" Width="350" Content="ContentHijacking: Silverlight" HorizontalContentAlignment="Center" />
+        <sdk:Label Content="by Soroush Dalili (@irsdl) - v1.0" Height="23" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="180,365,170,0" Name="labelSig" VerticalAlignment="Top" Width="350" />
+    </Grid>
+</UserControl>
