@@ -1,3 +1,7 @@
+/*
+Released under AGPL (see LICENSE for more information).
+by Soroush Dalili from NCC Group
+*/
 package {
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;

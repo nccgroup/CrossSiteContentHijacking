@@ -1,5 +1,9 @@
 Cross-Site Content Hijacking (XSCH) PoC
 =======================================
+License
+-------
+Released under AGPL (see LICENSE for more information).
+
 Description
 -----------
 This project can be used for:
@@ -31,6 +35,13 @@ The file types allowed to be uploaded should be restricted to only those that ar
 
 Adding “Content-Disposition: Attachment” header to static files will secure the website against Flash/PDF-based cross-site content hijacking attacks. It is recommended to perform this practice for all of the files that users need to download in all the modules that deal with a file download. Although this method does not secure the website against attacks by using Silverlight or similar objects, it can mitigate the risk of using Adobe Flash and PDF objects especially when uploading PDF files is permitted.
 
+Flash/PDF (crossdomain.xml) or Silverlight (clientaccesspolicy.xml) cross-domain policy files should be removed if they are not in use and there is no business requirement for Flash or Silverlight applications to communicate with the website.
+
+Cross-domain access should be restricted to a minimal set of domains that are trusted and will require access. An access policy is considered weak or insecure when a wildcard character is used especially in the value of the “uri” attribute.
+
+Any "crossdomain.xml" file which is used for Silverlight applications should be considered weak as it can only accept a wildcard (“*”) character in the domain attribute.
+
+Browser caching should be disabled for the corssdomain.xml and clientaccesspolicy.xml files. This enables the website to easily update the file or restrict access to the Web services if necessary. Once the client access policy file is checked, it remains in effect for the browser session so the impact of non-caching to the end-user is minimal. This can be raised as a low or informational risk issue based on the content of the target website and security and complexity of the policy file(s).
 
 References
 ----------
