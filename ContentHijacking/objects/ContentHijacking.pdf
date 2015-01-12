@@ -1,5 +1,6 @@
 % Created by Soroush Dalili (@irsdl)
 % Released under AGPL (see LICENSE for more information).
+% Version 1.1
 %PDF-1.1
 
 1 0 obj
@@ -21,12 +22,16 @@
 			var postData="";
 			this.getField("mydata").multiline=true;
 			
-			function onErrorFunc( e ) {
-				var errMessage = "Error:" + e.toString();
+			function onErrorFunc(e, customMSG) {
+				var errMessage = customMSG + " -- Error:" + e.toString();
 				// We like to alert this and that! we don't have enough money to pay for a fancy debugger!
 				app.alert(errMessage);
 
 				logIt(errMessage);
+			}
+			
+			function onMSGHandlerErrorFunc(e) {
+				onErrorFunc(e, "Error in messageHandler.");
 			}
 			
 			function logIt(strMessage){
@@ -62,7 +67,7 @@
 							logIt(contents);
 						}
 						catch(e){
-							onErrorFunc(e); 
+							onErrorFunc(e , "Error in connecting to HTML section"); 
 						}
 					}
 					
@@ -71,13 +76,13 @@
 						this.hostContainer.messageHandler = new Object(); 
 						this.hostContainer.messageHandler.myDoc = this; 
 						this.hostContainer.messageHandler.onMessage = onMessageFunc; 
-						this.hostContainer.messageHandler.onError = onErrorFunc; 
+						//this.hostContainer.messageHandler.onError = onMSGHandlerErrorFunc; 
 						this.hostContainer.messageHandler.onDisclose = function(){ 
 							return true; 
 						};
 					}
 					catch(e){
-						onErrorFunc(e);
+						onErrorFunc(e, "Error in setting messageHandler attributes.");
 					}
 					
 					function clearIntervals(){
@@ -92,12 +97,12 @@
 							app.setTimeOut("clearIntervals();",5000); // Keep sending the message for 5 seconds to make sure HTML will receive it
 						}
 						catch(e){
-							onErrorFunc(e);
+							onErrorFunc(e, "Error in telling HTML about PDF loading!");
 						}
 					}
 				}
 			}catch(e){
-				onErrorFunc(e);
+				onErrorFunc(e, "Error somewhere in the code!");
 			}
 		)
 		>>
@@ -273,14 +278,14 @@ stream
 				/**
 				 * Download the contents of the given URL.
 				 * @param vAddress -- the requested URL
-				 * @param content -- POST data
+				 * @param vContent -- POST data
 				 * @return the contents of the URL.
 				 */
-				function Post(vAddress,content)
+				function Post(vAddress,vContent)
 				{
 					F.value = "Post";
 					P1.value = vAddress;
-					P2.value = content;
+					P2.value = vContent;
 					this.execEvent("enter");
 					return ResultString.value;
 				}
@@ -303,7 +308,10 @@ stream
 					this.variables.nodes.append(xfa.form.createNode("text", "P1"));
 					this.variables.nodes.append(xfa.form.createNode("boolean", "NullValue"));
 					this.variables.nodes.append(xfa.form.createNode("text", "P2"));		
-					this.variables.nodes.append(xfa.form.createNode("text", "ResultString"));		
+					this.variables.nodes.append(xfa.form.createNode("text", "ResultString"));	
+					this.variables.nodes.append(xfa.form.createNode("text", "P3"));	
+					this.variables.nodes.append(xfa.form.createNode("text", "P4"));	
+					this.variables.nodes.append(xfa.form.createNode("text", "P5"));						
 				}
 				
 				// Record this for now as JavaScript god may not send us a better fruit! Adam said!
@@ -341,8 +349,9 @@ stream
 					ResultString = Get(P1)
 					
 				elseif (F == "Post") then
-					ResultString = Get(P1, P2)
-						
+					ResultString = Post(P1, P2)
+					; POST in FormCalc can accept more inputs such as additional headers!
+					; example: Post(P1, P2, "application/x-www-form-urlencoded", "utf-8", "Referer: " + P1);
 				else
 					ResultString = ""
 				endif

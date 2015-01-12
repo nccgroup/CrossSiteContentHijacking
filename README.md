@@ -28,6 +28,10 @@ Note: When Silverlight requests a .XAP file cross-domain, the content type must 
 
 Note: PDF files can only be used in Adobe Reader viewer (they will not work with Chrome and Firefox built-in PDF viewers)
 
+Usage Example:
+- in IE with Adobe Reader:
+- https://15.rs/ContentHijacking/ContentHijacking.html?objFile=objects/ContentHijacking.pdf&objType=PDF&target=http://0me.me/&POSTData=Param1=Value1
+
 Generic Recommendation to Solve the Security Issue
 --------------------------------------------------
 The file types allowed to be uploaded should be restricted to only those that are necessary for business functionality.
@@ -42,6 +46,16 @@ Cross-domain access should be restricted to a minimal set of domains that are tr
 Any "crossdomain.xml" file which is used for Silverlight applications should be considered weak as it can only accept a wildcard (“*”) character in the domain attribute.
 
 Browser caching should be disabled for the corssdomain.xml and clientaccesspolicy.xml files. This enables the website to easily update the file or restrict access to the Web services if necessary. Once the client access policy file is checked, it remains in effect for the browser session so the impact of non-caching to the end-user is minimal. This can be raised as a low or informational risk issue based on the content of the target website and security and complexity of the policy file(s).
+
+Note: Using "Referer" header cannot be a solution as it is possible to set this header for example by sending a POST request using Adobe Reader and PDF (see the "xfa-manual-ContentHijacking.pdf" file in the "objects" directory).
+
+Project Page
+------------
+See the project page for the latest update/help: https://github.com/nccgroup/CrossSiteContentHijacking
+
+Author
+------
+Soroush Dalili (@irsdl) from NCC Group
 
 References
 ----------

