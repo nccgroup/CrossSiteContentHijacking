@@ -37,7 +37,7 @@ Generic Recommendation to Solve the Security Issue
 The file types allowed to be uploaded should be restricted to only those that are necessary for business functionality.
 * The application should perform filtering and content checking on any files which are uploaded to the server. Files should be thoroughly scanned and validated before being made available to other users. If in doubt, the file should be discarded.
 
-Adding “Content-Disposition: Attachment” header to static files will secure the website against Flash/PDF-based cross-site content hijacking attacks. It is recommended to perform this practice for all of the files that users need to download in all the modules that deal with a file download. Although this method does not secure the website against attacks by using Silverlight or similar objects, it can mitigate the risk of using Adobe Flash and PDF objects especially when uploading PDF files is permitted.
+Adding the “Content-Disposition: Attachment” and “X-Content-Type-Options: nosniff” headers to the response of static files will secure the website against Flash or PDF-based cross-site content-hijacking attacks. It is recommended that this practice be performed for all of the files that users need to download in all the modules that deal with a file download. Although this method does not fully secure the website against attacks using Silverlight or similar objects, it can mitigate the risk of using Adobe Flash and PDF objects, especially when uploading PDF files is permitted.
 
 Flash/PDF (crossdomain.xml) or Silverlight (clientaccesspolicy.xml) cross-domain policy files should be removed if they are not in use and there is no business requirement for Flash or Silverlight applications to communicate with the website.
 
