@@ -1,7 +1,3 @@
-/*
-Released under AGPL (see LICENSE for more information).
-by Soroush Dalili from NCC Group
-*/
 package {
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
@@ -38,7 +34,11 @@ package {
 			ExternalInterface.addCallback("POSTURL",POSTURL);
 			
 			// To fix the size
-			stage.scaleMode = StageScaleMode.NO_SCALE;
+			try{
+				stage.scaleMode = StageScaleMode.NO_SCALE;
+			}catch(okerr:Error){
+				// nothing! this is useful when embedded inside another flash file like CVE-2011-2461
+			}
 			// Change the background color
 			backgroundColor(0xFFCFF2CD);
 			// Informational label at the top of the page

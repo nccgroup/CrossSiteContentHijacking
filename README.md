@@ -9,6 +9,8 @@ Description
 This project can be used for:
 - Exploiting websites with insecure policy files (crossdomain.xml or clientaccesspolicy.xml) by reading their contents.
 - Exploiting insecure file upload functionalities which do not check the file contents properly or allow to upload SWF or PDF files without having Content-Disposition header during the download process. In this scenario, the created SWF, XAP, or PDF file should be uploaded with any extension such as .JPG to the target website. Then, the "Object File" value should be set to the URL of the uploaded file to read the target website's contents.
+- Exploiting CVE-2011-2461 (see the references for more details)
+
 Note: .XAP files can be renamed to any other extension but they cannot be load cross-domain anymore. It seems Silverlight finds the file extension based on the provided URL and ignores it if it is not .XAP. This can still be exploited if a website allows users to use ";" or "/" after the actual file name to add a ".XAP" extension.
 
 
@@ -17,10 +19,13 @@ Usage
 - Exploiting an insecure policy file:
   1) Host the ContentHijacking directory with a web server.
   2) Browse to the ContentHijacking.html page.
-  3) Change the target in the HTML page to a suitable object from the "objects" directory ("xfa-manual-ContentHijacking.pdf" cannot be used).
+  3) Change the "Object File" field in the HTML page to a suitable object from the "objects" directory ("xfa-manual-ContentHijacking.pdf" cannot be used).
 - Exploiting an insecure file upload/download: 
   1) Upload an object file from the "objects" directory to the victim server. These files can also be renamed with another extension when uploaded to another domain (for this purpose, first use Flash and then PDF as Silverlight XAP files will not normally work with another extension from another domain).
-  2) Change the target in the HTML page to the location of the uploaded file.
+  2) The "Object File" field should be set to the location of the uploaded file.
+- Exploiting CVE-2011-2461
+  1) The "Object File" field should be set to the vulnerable file.
+  2) Select the "Flash CVE-2011-2461 Only" option from the drop-down list of the "Type" field.
 
 Note: .XAP files can be renamed to any other extension but they cannot be load cross-domain anymore. It seems Silverlight finds the file extension based on the provided URL and ignores it if it is not .XAP. This can still be exploited if a website allows users to use “;” or “/” after the actual file name to add a “.XAP” extension.
 
@@ -76,3 +81,6 @@ http://www.adobe.com/devnet/articles/crossdomain_policy_file_spec.html
 
 Setting a crossdomain.xml file for HTTP streaming
 http://www.adobe.com/devnet/adobe-media-server/articles/cross-domain-xml-for-streaming.html
+
+Exploiting CVE-2011-2461 on google.com
+http://blog.mindedsecurity.com/2015/03/exploiting-cve-2011-2461-on-googlecom.html
