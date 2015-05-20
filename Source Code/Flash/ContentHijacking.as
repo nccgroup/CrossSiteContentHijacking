@@ -87,7 +87,7 @@ package {
 			
 			// Version label at the bottom of the page
 			var lblInfo:TextField = createCustomTextField(200, 400, 300, 22);
-            lblInfo.htmlText = "by Soroush Dalili (@irsdl) - v1.0";
+            lblInfo.htmlText = "by Soroush Dalili (@irsdl) - v1.1";
 			
 			// We need to anounce to the page that the object has been loaded successfuly!
 			try{
