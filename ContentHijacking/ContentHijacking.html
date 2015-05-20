@@ -1,5 +1,5 @@
 <html>
-<!-- Created by Soroush Dalili (@irsdl) from NCC Group - v1.2-->
+<!-- Created by Soroush Dalili (@irsdl) from NCC Group - v1.3-->
 <!-- Released under AGPL (see LICENSE for more information). -->
 <!--
 Usage Example:
@@ -176,7 +176,7 @@ https://15.rs/ContentHijacking/ContentHijacking.html?objFile=objects/ContentHija
 
 	<script>
 		// Common scripts
-		var currentLocation = document.location.toString();
+		var currentLocation = document.location.href.split('?')[0];
 		var	currentPath = currentLocation.substring(0,currentLocation.lastIndexOf('/')+1);
 		var objType;
 		function showHelp(){
@@ -326,7 +326,14 @@ https://15.rs/ContentHijacking/ContentHijacking.html?objFile=objects/ContentHija
 				objCaller.POSTURL('javaScriptLogData',target,postData);
 			}
 		}
-
+		
+		function showURLwithParams(){
+			var objFile = document.getElementById('objFile').value;
+			var objType = document.getElementById('objType').value;
+			var target = document.getElementById('target').value;
+			var postData = document.getElementById('postData').value;
+			prompt('Generated URL', currentLocation + '?objfile='+objFile+'&objtype='+objType+'&target='+target+'&postdata='+postData);
+		}
 	</script>
 </head>
 
@@ -398,6 +405,7 @@ https://15.rs/ContentHijacking/ContentHijacking.html?objFile=objects/ContentHija
 			<input type="button" id="loadObjRetrieveBtn" value="Load Object & Retrieve Contents" onclick="refreshObjectTag();" />
 			<input type="button" id="clearLogsBtn" value="Clear Logs" onclick="clearLogs()" />
 			<input type="button" id="helpBtn" value="Help" onclick="showHelp()" />
+			<input type="button" id="generateURLBtn" value="Show URL with Parameters" onclick="showURLwithParams()" />
 		</td>
 	</tr>
 	<tr>
