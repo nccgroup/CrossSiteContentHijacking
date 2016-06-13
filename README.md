@@ -40,7 +40,7 @@ Note: Reading static contents or data that is publicly accessible cannot be cons
 
 Usage Example:
 - in IE with Adobe Reader:
-- https://15.rs/ContentHijacking/ContentHijacking.html?objFile=objects/ContentHijacking.pdf&objType=PDF&target=http://0me.me/&POSTData=Param1=Value1
+- https://15.rs/ContentHijacking/ContentHijackingLoader.html?objfile=https://15.rs/ContentHijacking/objects/ContentHijacking.pdf&objtype=pdf&target=https://0me.me/&postdata=param1=foobar&logmode=all&regex=owasp.*&isauto=1
 
 Generic Recommendation to Solve the Security Issue
 --------------------------------------------------
