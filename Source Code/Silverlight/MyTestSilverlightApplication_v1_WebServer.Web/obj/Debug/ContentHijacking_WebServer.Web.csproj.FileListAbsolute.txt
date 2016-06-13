@@ -1,4 +1,0 @@
-C:\Users\User\Documents\Visual Studio 2010\Projects\MyTestSilverlightApplication_v1\MyTestSilverlightApplication_v1_WebServer.Web\bin\MyTestSilverlightApplication_v1_WebServer.Web.dll
-C:\Users\User\Documents\Visual Studio 2010\Projects\MyTestSilverlightApplication_v1\MyTestSilverlightApplication_v1_WebServer.Web\bin\MyTestSilverlightApplication_v1_WebServer.Web.pdb
-C:\Users\User\Documents\Visual Studio 2010\Projects\MyTestSilverlightApplication_v1\MyTestSilverlightApplication_v1_WebServer.Web\obj\Debug\MyTestSilverlightApplication_v1_WebServer.Web.dll
-C:\Users\User\Documents\Visual Studio 2010\Projects\MyTestSilverlightApplication_v1\MyTestSilverlightApplication_v1_WebServer.Web\obj\Debug\MyTestSilverlightApplication_v1_WebServer.Web.pdb

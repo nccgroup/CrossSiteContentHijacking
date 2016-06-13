@@ -86,8 +86,8 @@ package {
 			txtContent.type= TextFieldType.INPUT;
 			
 			// Version label at the bottom of the page
-			var lblInfo:TextField = createCustomTextField(200, 400, 300, 22);
-            lblInfo.htmlText = "by Soroush Dalili (@irsdl) - v1.1";
+			var lblInfo2:TextField = createCustomTextField(200, 400, 300, 22);
+            lblInfo2.htmlText = "by Soroush Dalili (@irsdl) - v1.2";
 			
 			// We need to anounce to the page that the object has been loaded successfuly!
 			try{
@@ -219,7 +219,7 @@ package {
 			try{
 				var loader:URLLoader = URLLoader(event.target);
 				if(loader.data)
-					contents = "Hijacked Contents:\r\n" + loader.data;
+					contents = loader.data;
 			}catch(e:Error){
 				//
 			}
@@ -227,12 +227,16 @@ package {
 			txtContent.appendText(data+"\r\n" +contents+"\r\n\r\n");
 			
 			if(jsCallback!=""){
-				ExternalInterface.call(jsCallback, escape(data));
-				if(contents==="")
+				ExternalInterface.call(jsCallback, escape(data),"1");
+				if(contents===""){
 					contents = "No content was downloaded!";
-				ExternalInterface.call(jsCallback, escape(contents));
+					ExternalInterface.call(jsCallback, escape(contents),"1");
+				}else{
+					ExternalInterface.call(jsCallback, escape(contents),"0");
+				}
 			}
 		}
 		
 	}
 }
+//http://stackoverflow.com/questions/7533106/urlloader-how-to-get-the-url-that-was-loaded - TODO

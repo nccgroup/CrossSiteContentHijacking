@@ -25,7 +25,7 @@ namespace ContentHijacking
             InitializeComponent();
 
             // Associate the web client with a handler for its
-            // UploadStringCompleted event.
+            // DownloadStringCompleted event.
             webClient.DownloadStringCompleted +=
                 new DownloadStringCompletedEventHandler(webClient_DownloadStringCompleted);
 
@@ -49,7 +49,7 @@ namespace ContentHijacking
             }
         }
 
-        // Event handler for the UploadStringCompleted event.
+        // Event handler for the DownloadStringCompleted event.
         void webClient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
             // Output the response. 
@@ -57,17 +57,17 @@ namespace ContentHijacking
                 if (!e.Error.Message.Equals(""))
                 {
                     textBoxResult.Text = e.Error.Message + "\r\n" + e.Error.StackTrace;
-                    InvokeCallback_JSLogger(textBoxResult.Text);
+                    InvokeCallback_JSLogger(textBoxResult.Text,"1");
                 }
                 else
                 {
                     textBoxResult.Text = e.Error.InnerException.Message + "\r\n" + e.Error.InnerException.StackTrace;
-                    InvokeCallback_JSLogger(textBoxResult.Text);
+                    InvokeCallback_JSLogger(textBoxResult.Text,"1");
                 }
             else
             {
                 textBoxResult.Text = e.Result;
-                InvokeCallback_JSLogger(textBoxResult.Text);
+                InvokeCallback_JSLogger(textBoxResult.Text,"0");
             }
         }
 
@@ -78,17 +78,17 @@ namespace ContentHijacking
                 if (!e.Error.Message.Equals(""))
                 {
                     textBoxResult.Text = e.Error.Message + "\r\n" + e.Error.StackTrace;
-                    InvokeCallback_JSLogger(textBoxResult.Text);
+                    InvokeCallback_JSLogger(textBoxResult.Text,"1");
                 }
                 else
                 {
                     textBoxResult.Text = e.Error.InnerException.Message + "\r\n" + e.Error.InnerException.StackTrace;
-                    InvokeCallback_JSLogger(textBoxResult.Text);
+                    InvokeCallback_JSLogger(textBoxResult.Text,"1");
                 }
             else
             {
                 textBoxResult.Text = e.Result;
-                InvokeCallback_JSLogger(textBoxResult.Text);
+                InvokeCallback_JSLogger(textBoxResult.Text,"1");
             }
         }
 
@@ -104,7 +104,7 @@ namespace ContentHijacking
             catch (Exception err)
             {
                 textBoxResult.Text = "URL Error:" + err.Message;
-                InvokeCallback_JSLogger(textBoxResult.Text);
+                InvokeCallback_JSLogger(textBoxResult.Text,"1");
             }
         }
 
@@ -121,15 +121,15 @@ namespace ContentHijacking
             catch (Exception err)
             {
                 textBoxResult.Text = "URL Error:" + err.Message;
-                InvokeCallback_JSLogger(textBoxResult.Text);
+                InvokeCallback_JSLogger(textBoxResult.Text,"1");
             }
         }
 
-        public void InvokeCallback_JSLogger(string strInput)
+        public void InvokeCallback_JSLogger(string strInput, string strType)
         {
             if (!string.IsNullOrEmpty(jsCallback))
             {
-                System.Windows.Browser.HtmlPage.Window.Invoke(jsCallback, strInput);
+                System.Windows.Browser.HtmlPage.Window.Invoke(jsCallback, strInput, strType);
             }
         }
 

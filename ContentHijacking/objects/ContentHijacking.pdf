@@ -1,6 +1,6 @@
 % Created by Soroush Dalili (@irsdl)
 % Released under AGPL (see LICENSE for more information).
-% Version 1.1
+% Version 1.2
 %PDF-1.1
 
 1 0 obj
@@ -27,17 +27,18 @@
 				// We like to alert this and that! we don't have enough money to pay for a fancy debugger!
 				app.alert(errMessage);
 
-				logIt(errMessage);
+				logIt(errMessage,"1");
 			}
 			
 			function onMSGHandlerErrorFunc(e) {
 				onErrorFunc(e, "Error in messageHandler.");
 			}
 			
-			function logIt(strMessage){
+			function logIt(strMessage,strType){
 				//this.getField("mydata").value += strMessage; // I cannot do this when I have XFA?
+				// strType = 1 -> error!
 				if(myHostContainer!=null && target!=""){
-					myHostContainer.postMessage([strMessage]);
+					myHostContainer.postMessage([strMessage,strType]);
 				}
 			}
 			
@@ -59,12 +60,14 @@
 							else
 								contents = objMy_fc_Form.func.Get(target);
 							
-							if(contents=="") 
+							if(contents==""){
 								contents = "Target page was not accessible."; // I'm so sorry master!
-							else
-								contents = "Hijacked Data: " + contents; // This is an apple! I want to eat it now! He said...
+								logIt(contents,"1");
+							}else{
+								contents = contents; // This is the apple! I want to eat it now! He said...
+								logIt(contents,"0");
+							}
 							
-							logIt(contents);
 						}
 						catch(e){
 							onErrorFunc(e , "Error in connecting to HTML section"); 

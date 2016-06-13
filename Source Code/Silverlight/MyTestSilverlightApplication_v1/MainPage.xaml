@@ -12,6 +12,6 @@
         <TextBox Height="25" HorizontalAlignment="Left" Margin="111,37,0,0" Name="textBoxTarget" VerticalAlignment="Top" Width="570" />
         <sdk:Label Height="17" HorizontalAlignment="Left" Margin="12,41,0,0" Name="labelTarget" VerticalAlignment="Top" Width="93" Content="Target URL:" />
         <sdk:Label Height="23" HorizontalAlignment="Center" Margin="243,0,233,0" Name="labelType" VerticalAlignment="Top" Width="350" Content="ContentHijacking: Silverlight" HorizontalContentAlignment="Center" />
-        <sdk:Label Content="by Soroush Dalili (@irsdl) - v1.0" Height="23" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="180,365,170,0" Name="labelSig" VerticalAlignment="Top" Width="350" />
+        <sdk:Label Content="by Soroush Dalili (@irsdl) - v1.1" Height="23" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="180,365,170,0" Name="labelSig" VerticalAlignment="Top" Width="350" />
     </Grid>
 </UserControl>
