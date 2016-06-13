@@ -1,4 +1,4 @@
-Cross-Site Content Hijacking (XSCH) or Cross-Site Data Hijacking (XSDH) PoC Project 
+Cross-Site Content (Data) Hijacking (XSCH) PoC Project 
 =======================================
 License
 -------
@@ -13,7 +13,6 @@ This project can be used to provide a proof of concept for:
 - Exploiting websites with insecure HTML5 cross-origin resource sharing (CORS) headers
 
 Note: .XAP files can be renamed to any other extension but they cannot be load cross-domain anymore. It seems Silverlight finds the file extension based on the provided URL and ignores it if it is not .XAP. This can still be exploited if a website allows users to use ";" or "/" after the actual file name to add a ".XAP" extension.
-
 
 
 Usage
