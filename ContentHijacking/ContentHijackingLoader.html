@@ -1,5 +1,5 @@
 <html>
-<!-- Created by Soroush Dalili (@irsdl) from NCC Group - v1.4-->
+<!-- Created by Soroush Dalili (@irsdl) from NCC Group - v1.5-->
 <!-- Released under AGPL (see LICENSE for more information). -->
 <!--
 Usage Example:
@@ -258,7 +258,7 @@ https://15.rs/ContentHijacking/ContentHijacking.html?objFile=objects/ContentHija
 			if(regEx)  document.getElementById('regEx').value = regEx;
 			
 			logMode = document.getElementById('logMode').value;
-			updateTypeHelper();
+			updateTypeHelper(true);
 			
 			if(isAuto==1)
 				refreshObjectTag();
@@ -309,12 +309,12 @@ https://15.rs/ContentHijacking/ContentHijacking.html?objFile=objects/ContentHija
 		}
 		
 		function currentPageURLandOptions(){
-			var objFile = document.getElementById('objFile').value;
-			var objType = document.getElementById('objType').value;
-			var target = document.getElementById('target').value;
-			var postData = document.getElementById('postData').value;
-			var logMode = document.getElementById('logMode').value;
-			var regEx = document.getElementById('regEx').value;
+			var objFile = encodeURIComponent(document.getElementById('objFile').value);
+			var objType = encodeURIComponent(document.getElementById('objType').value);
+			var target = encodeURIComponent(document.getElementById('target').value);
+			var postData = encodeURIComponent(document.getElementById('postData').value);
+			var logMode = encodeURIComponent(document.getElementById('logMode').value);
+			var regEx = encodeURIComponent(document.getElementById('regEx').value);
 			
 			var myURL = currentLocation + '?objfile='+objFile+'&objtype='+objType+'&target='+target+'&postdata='+postData+'&logmode='+logMode+'&regex='+regEx;
 			return myURL;
@@ -329,7 +329,7 @@ https://15.rs/ContentHijacking/ContentHijacking.html?objFile=objects/ContentHija
 			prompt('Generated URL', myURL);
 		}
 		
-		function updateTypeHelper(){
+		function updateTypeHelper(isFromPopulate){
 			var objType = document.getElementById('objType').value;
 			var fileObj = document.getElementById('objFile');
 			var objTypeHelper = document.getElementById('typehelper');
@@ -352,7 +352,7 @@ https://15.rs/ContentHijacking/ContentHijacking.html?objFile=objects/ContentHija
 					break;
 			}
 			
-			if(objTypeHelper.innerText.match(/ContentHijacking\.[a-z]{3,4}/) && fileObj.value.match(/ContentHijacking\.[a-z]{3,4}/)){
+			if(!isFromPopulate && objTypeHelper.innerText.match(/ContentHijacking\.[a-z]{3,4}/) && fileObj.value.match(/ContentHijacking\.[a-z]{3,4}/)){
 				var newFile = objTypeHelper.innerText;
 				fileObj.value = fileObj.value.replace(/ContentHijacking\.[a-z]{3,4}/,newFile);
 			}
