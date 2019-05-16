@@ -1,10 +1,10 @@
 <html>
-<!-- Created by Soroush Dalili (@irsdl) from NCC Group - v1.5-->
+<!-- Created by Soroush Dalili (@irsdl) from NCC Group - v1.6-->
 <!-- Released under AGPL (see LICENSE for more information). -->
 <!--
 Usage Example:
 in IE with Adobe Reader:
-https://15.rs/ContentHijacking/ContentHijacking.html?objFile=objects/ContentHijacking.pdf&objType=PDF&target=http://0me.me/&POSTData=Param1=Value1
+https://15.rs/ContentHijacking/ContentHijackingLoader.html?objFile=objects/ContentHijacking.pdf&objType=PDF&target=http://0me.me/&POSTData=Param1=Value1
 -->
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
@@ -116,7 +116,11 @@ https://15.rs/ContentHijacking/ContentHijacking.html?objFile=objects/ContentHija
 					}
 				}else{
 					// if it is not a final result (e.g. message/error) or the RegEx is not valid we will show everything
-					var content = document.createTextNode(unescape(strData));
+					if(intType!=1337){ 
+						// fixing the URL decoding bug when displaying the current page URL
+						strData = unescape(strData)
+					}
+					var content = document.createTextNode(strData);
 					var newDiv = document.createElement('div');
 					newDiv.className = 'logdata';
 					newDiv.appendChild(content);
@@ -129,7 +133,7 @@ https://15.rs/ContentHijacking/ContentHijacking.html?objFile=objects/ContentHija
 		}
 
 		function refreshObjectTag(){
-			javaScriptLogData(currentPageURLandOptions(),1);
+			javaScriptLogData(currentPageURLandOptions(),1337);
 			var newURL = document.getElementById('objFile').value;
 			objType = document.getElementById('objType').value;
 			var newObjectTag;
